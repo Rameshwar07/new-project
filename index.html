@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Valentine Priti ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#ff4e8c,#ff9a9e);
+  color:white;
+  text-align:center;
+  overflow:hidden;
+}
+
+.container{
+  position:relative;
+  z-index:10;
+  padding:30px;
+}
+
+h1{font-size:2.4rem;margin-bottom:10px;}
+p{font-size:1.1rem;}
+
+#slideshow{
+  width:260px;
+  height:340px;
+  margin:20px auto;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 0 25px rgba(0,0,0,.4);
+}
+
+#slideshow img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+button{
+  padding:12px 24px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:1rem;
+  margin:10px;
+}
+
+#startBtn{background:white;color:#ff3366;font-weight:bold;}
+#yesBtn{background:#ff3366;color:white;}
+#noBtn{background:#ccc;color:black;position:absolute;}
+
+#popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  z-index:20;
+  align-items:center;
+  justify-content:center;
+}
+
+.card{
+  background:white;
+  color:#ff3366;
+  padding:25px;
+  border-radius:20px;
+  width:90%;
+  max-width:320px;
+  position:relative;
+}
+
+#letter{
+  min-height:100px;
+  margin-top:15px;
+  font-size:1.1rem;
+}
+
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background:red;
+  animation:fall 3s linear infinite;
+}
+
+@keyframes fall{
+  from{transform:translateY(-10vh);}
+  to{transform:translateY(110vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Happy Valentine’s Day Priti ❤️</h1>
+  <p>Every moment with you is my favorite 💕</p>
+
+  <div id="slideshow">
+    <img id="slide" src="photo1.jpg">
+  </div>
+
+  <button id="startBtn">Tap My Heart 💖</button>
+</div>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+<div id="popup">
+  <div class="card">
+    <h2>Will you be my Valentine? 💍</h2>
+    <div id="letter"></div>
+    <button id="yesBtn">YES ❤️</button>
+    <button id="noBtn">NO 😈</button>
+  </div>
+</div>
+
+<script>
+/* MUSIC + POPUP */
+const startBtn = document.getElementById("startBtn");
+const popup = document.getElementById("popup");
+const music = document.getElementById("music");
+
+startBtn.onclick = () => {
+  music.play();
+  popup.style.display="flex";
+  typeLetter();
+};
+
+/* SLIDESHOW */
+const photos=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg"];
+let i=0;
+setInterval(()=>{
+  i=(i+1)%photos.length;
+  document.getElementById("slide").src=photos[i];
+},2500);
+
+/* TYPING LETTER */
+const text = "Priti, every smile of yours makes my world brighter. I can’t imagine my life without you. You are my today, tomorrow, and always ❤️";
+let idx=0;
+function typeLetter(){
+  if(idx<text.length){
+    document.getElementById("letter").innerHTML+=text.charAt(idx);
+    idx++;
+    setTimeout(typeLetter,40);
+  }
+}
+
+/* NO BUTTON RUN AWAY */
+const noBtn=document.getElementById("noBtn");
+noBtn.onmouseover=()=>{
+  noBtn.style.left=Math.random()*200+"px";
+  noBtn.style.top=Math.random()*200+"px";
+};
+
+/* YES = CONFETTI */
+document.getElementById("yesBtn").onclick=()=>{
+  popup.innerHTML="<h1>YAYYY 💖💖💖</h1>";
+  for(let i=0;i<100;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+};
+</script>
+
+</body>
+</html>
