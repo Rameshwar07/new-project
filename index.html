@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Valentine Proposal ❤️</title>
+<title>Ultimate Proposal ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,10 +14,33 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   height:100vh;
   overflow:hidden;
+}
+
+/* ---------- CINEMATIC INTRO ---------- */
+#intro{
+  position:fixed;
+  inset:0;
+  background:black;
   display:flex;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
+  font-size:2rem;
+  letter-spacing:2px;
+  animation:fadeOut 4s forwards 3s;
+  z-index:50;
+}
+
+@keyframes fadeOut{
+  to{opacity:0;visibility:hidden}
+}
+
+/* ---------- MAIN LAYOUT ---------- */
+.container{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:60px;
 }
 
 /* ---------- STAR BACKGROUND ---------- */
@@ -27,14 +50,23 @@ canvas{
   z-index:0;
 }
 
+/* ---------- GLASS UI ---------- */
+.glass{
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(25px);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:30px;
+  padding:40px;
+  z-index:5;
+  box-shadow:0 0 50px rgba(255,0,128,.3);
+}
+
 /* ---------- 3D CUBE ---------- */
 .scene{
   width:260px;
   height:260px;
   perspective:1000px;
   position:relative;
-  z-index:5;
-  margin-bottom:40px;
 }
 
 .cube{
@@ -43,6 +75,7 @@ canvas{
   position:absolute;
   transform-style:preserve-3d;
   animation:rotateCube 12s infinite linear;
+  cursor:pointer;
 }
 
 .cube img{
@@ -55,29 +88,39 @@ canvas{
 }
 
 /* Cube faces */
-.front  { transform: rotateY(0deg) translateZ(130px); }
-.back   { transform: rotateY(180deg) translateZ(130px); }
-.right  { transform: rotateY(90deg) translateZ(130px); }
-.left   { transform: rotateY(-90deg) translateZ(130px); }
+.front{transform:rotateY(0deg) translateZ(130px)}
+.back{transform:rotateY(180deg) translateZ(130px)}
+.right{transform:rotateY(90deg) translateZ(130px)}
+.left{transform:rotateY(-90deg) translateZ(130px)}
 
 @keyframes rotateCube{
-  0%   { transform: rotateX(-20deg) rotateY(0deg); }
-  100% { transform: rotateX(-20deg) rotateY(360deg); }
+  0%{transform:rotateX(-20deg) rotateY(0deg)}
+  100%{transform:rotateX(-20deg) rotateY(360deg)}
 }
 
-/* ---------- TYPEWRITER ---------- */
+/* ---------- FLOATING HEARTS AROUND CUBE ---------- */
+.floating-heart{
+  position:absolute;
+  font-size:22px;
+  animation:orbit 6s linear infinite;
+}
+
+@keyframes orbit{
+  from{transform:rotate(0deg) translateX(160px) rotate(0deg)}
+  to{transform:rotate(360deg) translateX(160px) rotate(-360deg)}
+}
+
+/* ---------- LOVE LETTER RIGHT ---------- */
 #loveLetter{
-  font-size:1.3rem;
-  text-align:center;
-  width:80%;
-  max-width:700px;
-  min-height:60px;
-  z-index:5;
+  width:400px;
+  font-size:1.2rem;
+  line-height:1.6;
+  min-height:100px;
 }
 
 /* ---------- BUTTON ---------- */
 button{
-  margin-top:30px;
+  margin-top:20px;
   padding:15px 40px;
   border:none;
   border-radius:40px;
@@ -87,67 +130,67 @@ button{
   color:white;
   box-shadow:0 0 25px #ff0066;
   transition:.3s;
-  z-index:5;
 }
-button:hover{
-  transform:scale(1.1);
-}
+button:hover{transform:scale(1.1)}
 
-/* ---------- HEART ANIMATION ---------- */
-@keyframes floatHeart{
-  from{transform:translate(0,0) scale(.5);opacity:1}
-  to{transform:translate(var(--x),var(--y)) scale(1.4);opacity:0}
-}
-
-/* ---------- PULSE BG ---------- */
-.pulse-bg{
+/* ---------- ZOOM IMAGE ---------- */
+#zoomView{
   position:fixed;
   inset:0;
-  background:radial-gradient(circle,#ff0066,transparent 70%);
-  animation:pulse 2s infinite;
-  z-index:1;
+  background:rgba(0,0,0,.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
 }
-@keyframes pulse{
-  0%{opacity:.2}
-  50%{opacity:.5}
-  100%{opacity:.2}
+#zoomView img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:20px;
 }
 
-/* ---------- RING ---------- */
-.ring{
-  position:fixed;
-  bottom:12%;
-  font-size:70px;
-  animation:sparkle 1s infinite;
-  z-index:10;
+/* ---------- HEART BURST ---------- */
+@keyframes floatHeart{
+  from{transform:translate(0,0) scale(.5);opacity:1}
+  to{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0}
 }
-@keyframes sparkle{
-  0%,100%{text-shadow:0 0 10px gold}
-  50%{text-shadow:0 0 40px white}
+
+/* ---------- FIREWORK SKY ---------- */
+@keyframes explode{
+  0%{transform:scale(0);opacity:1}
+  100%{transform:scale(4);opacity:0}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
+<div id="intro">Every Love Story Is Beautiful… ❤️</div>
 
+<canvas id="stars"></canvas>
 <audio id="music" src="music.mp3" loop></audio>
 
-<!-- 3D PHOTO CUBE -->
-<div class="scene">
-  <div class="cube">
-    <img src="photo1.jpg" class="front">
-    <img src="photo2.jpg" class="back">
-    <img src="photo3.jpg" class="right">
-    <img src="photo4.jpg" class="left">
+<div class="container">
+
+  <!-- LEFT SIDE CUBE -->
+  <div class="glass scene">
+    <div class="cube" id="cube">
+      <img src="photo1.jpg" class="front">
+      <img src="photo2.jpg" class="back">
+      <img src="photo3.jpg" class="right">
+      <img src="photo4.jpg" class="left">
+    </div>
   </div>
+
+  <!-- RIGHT SIDE LETTER -->
+  <div class="glass">
+    <div id="loveLetter"></div>
+    <button id="yesBtn">YES ❤️</button>
+  </div>
+
 </div>
 
-<!-- AUTO TYPING LETTER -->
-<div id="loveLetter"></div>
-
-<button id="yesBtn">YES ❤️</button>
+<div id="zoomView"><img id="zoomImg"></div>
 
 <script>
 
@@ -159,13 +202,8 @@ canvas.height=window.innerHeight;
 
 let stars=[];
 for(let i=0;i<150;i++){
- stars.push({
-  x:Math.random()*canvas.width,
-  y:Math.random()*canvas.height,
-  size:Math.random()*2
- });
+ stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2});
 }
-
 function drawStars(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
  ctx.fillStyle="white";
@@ -178,37 +216,51 @@ function drawStars(){
 }
 drawStars();
 
-/* ---------- TYPEWRITER EFFECT ---------- */
-const text="From the moment you came into my life, everything became beautiful. You are my happiness, my peace, my forever. ❤️";
-const letter=document.getElementById("loveLetter");
+/* ---------- FLOATING HEARTS AROUND CUBE ---------- */
+for(let i=0;i<6;i++){
+ const h=document.createElement("div");
+ h.className="floating-heart";
+ h.innerHTML="❤️";
+ h.style.animationDelay=(i*1)+"s";
+ document.querySelector(".scene").appendChild(h);
+}
 
+/* ---------- TYPEWRITER ---------- */
+const text="You are the most beautiful chapter of my life. Every smile of yours lights up my world. I promise to stand beside you forever. ❤️";
 let i=0;
 function typeWriter(){
  if(i<text.length){
-  letter.innerHTML+=text.charAt(i);
+  document.getElementById("loveLetter").innerHTML+=text.charAt(i);
   i++;
-  setTimeout(typeWriter,50);
+  setTimeout(typeWriter,40);
  }
 }
-typeWriter();
+setTimeout(typeWriter,4000);
+
+/* ---------- ZOOM ON CLICK ---------- */
+const cube=document.getElementById("cube");
+const zoom=document.getElementById("zoomView");
+const zoomImg=document.getElementById("zoomImg");
+
+cube.onclick=()=>{
+ const imgs=cube.querySelectorAll("img");
+ zoomImg.src=imgs[Math.floor(Math.random()*imgs.length)].src;
+ zoom.style.display="flex";
+}
+zoom.onclick=()=>zoom.style.display="none";
 
 /* ---------- YES BUTTON EFFECT ---------- */
 const yesBtn=document.getElementById("yesBtn");
 const music=document.getElementById("music");
 
 yesBtn.onclick=()=>{
-
  music.play();
-
- const bg=document.createElement("div");
- bg.className="pulse-bg";
- document.body.appendChild(bg);
 
  const rect=yesBtn.getBoundingClientRect();
  const centerX=rect.left+rect.width/2;
  const centerY=rect.top+rect.height/2;
 
- /* HEART BURST */
+ /* HEART BURST EVERY CLICK */
  for(let i=0;i<60;i++){
   const heart=document.createElement("div");
   heart.innerHTML="❤️";
@@ -216,8 +268,7 @@ yesBtn.onclick=()=>{
   heart.style.left=centerX+"px";
   heart.style.top=centerY+"px";
   heart.style.fontSize=(20+Math.random()*25)+"px";
-  heart.style.zIndex="20";
-  heart.style.pointerEvents="none";
+  heart.style.zIndex="200";
 
   const xMove=(Math.random()-0.5)*800+"px";
   const yMove=(Math.random()-1)*800+"px";
@@ -225,16 +276,23 @@ yesBtn.onclick=()=>{
   heart.style.setProperty("--x",xMove);
   heart.style.setProperty("--y",yMove);
   heart.style.animation="floatHeart 2.5s ease-out forwards";
-
   document.body.appendChild(heart);
   setTimeout(()=>heart.remove(),2500);
  }
 
- /* Ring */
- const ring=document.createElement("div");
- ring.className="ring";
- ring.innerHTML="💍";
- document.body.appendChild(ring);
+ /* FIREWORK SKY */
+ for(let i=0;i<15;i++){
+  const fire=document.createElement("div");
+  fire.innerHTML="💖";
+  fire.style.position="fixed";
+  fire.style.left=Math.random()*100+"vw";
+  fire.style.top=Math.random()*60+"vh";
+  fire.style.fontSize="30px";
+  fire.style.zIndex="150";
+  fire.style.animation="explode 1.5s ease-out forwards";
+  document.body.appendChild(fire);
+  setTimeout(()=>fire.remove(),1500);
+ }
 };
 
 </script>
