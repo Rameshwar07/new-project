@@ -2,16 +2,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For Priti ❤️</title>
+<title>Valentine Proposal ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:black;
   color:white;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   height:100vh;
   overflow:hidden;
   display:flex;
@@ -20,152 +20,223 @@ body{
   flex-direction:column;
 }
 
-/* Background pulse */
-.pulse-bg{
+/* ---------- STAR BACKGROUND ---------- */
+canvas{
   position:fixed;
   inset:0;
-  background:radial-gradient(circle,#ff0066,transparent 70%);
-  opacity:0;
-  z-index:-1;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%{opacity:.2;transform:scale(1)}
-  50%{opacity:.6;transform:scale(1.2)}
-  100%{opacity:.2;transform:scale(1)}
+  z-index:0;
 }
 
-/* Card */
-.card{
-  background:rgba(255,255,255,.1);
-  backdrop-filter:blur(25px);
-  border-radius:25px;
-  padding:40px;
-  text-align:center;
-  width:350px;
-  box-shadow:0 0 40px rgba(255,0,128,.6);
+/* ---------- 3D CUBE ---------- */
+.scene{
+  width:260px;
+  height:260px;
+  perspective:1000px;
   position:relative;
+  z-index:5;
+  margin-bottom:40px;
 }
 
-h1{
-  font-size:1.8rem;
-  margin-bottom:20px;
+.cube{
+  width:100%;
+  height:100%;
+  position:absolute;
+  transform-style:preserve-3d;
+  animation:rotateCube 12s infinite linear;
 }
 
+.cube img{
+  position:absolute;
+  width:260px;
+  height:260px;
+  object-fit:cover;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(255,0,128,.6);
+}
+
+/* Cube faces */
+.front  { transform: rotateY(0deg) translateZ(130px); }
+.back   { transform: rotateY(180deg) translateZ(130px); }
+.right  { transform: rotateY(90deg) translateZ(130px); }
+.left   { transform: rotateY(-90deg) translateZ(130px); }
+
+@keyframes rotateCube{
+  0%   { transform: rotateX(-20deg) rotateY(0deg); }
+  100% { transform: rotateX(-20deg) rotateY(360deg); }
+}
+
+/* ---------- TYPEWRITER ---------- */
+#loveLetter{
+  font-size:1.3rem;
+  text-align:center;
+  width:80%;
+  max-width:700px;
+  min-height:60px;
+  z-index:5;
+}
+
+/* ---------- BUTTON ---------- */
 button{
-  padding:14px 30px;
+  margin-top:30px;
+  padding:15px 40px;
   border:none;
-  border-radius:30px;
-  font-size:1rem;
+  border-radius:40px;
+  font-size:1.1rem;
   cursor:pointer;
   background:linear-gradient(90deg,#ff3366,#ff0066);
   color:white;
-  box-shadow:0 0 20px #ff0066;
+  box-shadow:0 0 25px #ff0066;
   transition:.3s;
+  z-index:5;
 }
 button:hover{
   transform:scale(1.1);
 }
 
-/* Floating hearts */
+/* ---------- HEART ANIMATION ---------- */
 @keyframes floatHeart{
-  from{transform:translateY(0) scale(.5);opacity:1}
-  to{transform:translateY(-120vh) scale(1.5);opacity:0}
+  from{transform:translate(0,0) scale(.5);opacity:1}
+  to{transform:translate(var(--x),var(--y)) scale(1.4);opacity:0}
 }
 
-/* Firework */
-@keyframes explode{
-  0%{transform:scale(0);opacity:1}
-  100%{transform:scale(3);opacity:0}
+/* ---------- PULSE BG ---------- */
+.pulse-bg{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,#ff0066,transparent 70%);
+  animation:pulse 2s infinite;
+  z-index:1;
+}
+@keyframes pulse{
+  0%{opacity:.2}
+  50%{opacity:.5}
+  100%{opacity:.2}
 }
 
-/* Ring sparkle */
+/* ---------- RING ---------- */
+.ring{
+  position:fixed;
+  bottom:12%;
+  font-size:70px;
+  animation:sparkle 1s infinite;
+  z-index:10;
+}
 @keyframes sparkle{
   0%,100%{text-shadow:0 0 10px gold}
-  50%{text-shadow:0 0 30px white}
-}
-
-/* Name particles */
-.name{
-  position:fixed;
-  top:40%;
-  font-size:3rem;
-  font-weight:bold;
-  background:linear-gradient(90deg,#ff0080,#ffcc00,#ff0080);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:glowName 2s infinite alternate;
-}
-@keyframes glowName{
-  from{text-shadow:0 0 20px #ff0080}
-  to{text-shadow:0 0 60px #ff00cc}
+  50%{text-shadow:0 0 40px white}
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="stars"></canvas>
+
 <audio id="music" src="music.mp3" loop></audio>
 
-<div class="card">
-  <h1>Will you be my Valentine? 💍</h1>
-  <button id="yesBtn">YES ❤️</button>
+<!-- 3D PHOTO CUBE -->
+<div class="scene">
+  <div class="cube">
+    <img src="photo1.jpg" class="front">
+    <img src="photo2.jpg" class="back">
+    <img src="photo3.jpg" class="right">
+    <img src="photo4.jpg" class="left">
+  </div>
 </div>
 
+<!-- AUTO TYPING LETTER -->
+<div id="loveLetter"></div>
+
+<button id="yesBtn">YES ❤️</button>
+
 <script>
+
+/* ---------- STAR BACKGROUND ---------- */
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let stars=[];
+for(let i=0;i<150;i++){
+ stars.push({
+  x:Math.random()*canvas.width,
+  y:Math.random()*canvas.height,
+  size:Math.random()*2
+ });
+}
+
+function drawStars(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="white";
+ stars.forEach(s=>{
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+  ctx.fill();
+ });
+ requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* ---------- TYPEWRITER EFFECT ---------- */
+const text="From the moment you came into my life, everything became beautiful. You are my happiness, my peace, my forever. ❤️";
+const letter=document.getElementById("loveLetter");
+
+let i=0;
+function typeWriter(){
+ if(i<text.length){
+  letter.innerHTML+=text.charAt(i);
+  i++;
+  setTimeout(typeWriter,50);
+ }
+}
+typeWriter();
+
+/* ---------- YES BUTTON EFFECT ---------- */
 const yesBtn=document.getElementById("yesBtn");
 const music=document.getElementById("music");
 
-yesBtn.onclick=(e)=>{
-  music.play();
+yesBtn.onclick=()=>{
 
-  /* Background pulse */
-  const bg=document.createElement("div");
-  bg.className="pulse-bg";
-  document.body.appendChild(bg);
+ music.play();
 
-  /* Hearts burst from button */
-  const rect=yesBtn.getBoundingClientRect();
-  for(let i=0;i<50;i++){
-    const heart=document.createElement("div");
-    heart.innerHTML="❤️";
-    heart.style.position="fixed";
-    heart.style.left=rect.left+rect.width/2+"px";
-    heart.style.top=rect.top+"px";
-    heart.style.fontSize=(20+Math.random()*25)+"px";
-    heart.style.animation=`floatHeart ${3+Math.random()*3}s linear forwards`;
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-  }
+ const bg=document.createElement("div");
+ bg.className="pulse-bg";
+ document.body.appendChild(bg);
 
-  /* Firework hearts */
-  for(let i=0;i<20;i++){
-    const fire=document.createElement("div");
-    fire.innerHTML="💖";
-    fire.style.position="fixed";
-    fire.style.left=Math.random()*100+"vw";
-    fire.style.top=Math.random()*100+"vh";
-    fire.style.fontSize="30px";
-    fire.style.animation="explode 1.5s ease-out forwards";
-    document.body.appendChild(fire);
-    setTimeout(()=>fire.remove(),1500);
-  }
+ const rect=yesBtn.getBoundingClientRect();
+ const centerX=rect.left+rect.width/2;
+ const centerY=rect.top+rect.height/2;
 
-  /* Name glow */
-  const name=document.createElement("div");
-  name.className="name";
-  name.innerHTML="Priti ❤️";
-  document.body.appendChild(name);
+ /* HEART BURST */
+ for(let i=0;i<60;i++){
+  const heart=document.createElement("div");
+  heart.innerHTML="❤️";
+  heart.style.position="fixed";
+  heart.style.left=centerX+"px";
+  heart.style.top=centerY+"px";
+  heart.style.fontSize=(20+Math.random()*25)+"px";
+  heart.style.zIndex="20";
+  heart.style.pointerEvents="none";
 
-  /* Ring sparkle */
-  const ring=document.createElement("div");
-  ring.innerHTML="💍";
-  ring.style.position="fixed";
-  ring.style.bottom="20%";
-  ring.style.fontSize="60px";
-  ring.style.animation="sparkle 1s infinite";
-  document.body.appendChild(ring);
+  const xMove=(Math.random()-0.5)*800+"px";
+  const yMove=(Math.random()-1)*800+"px";
+
+  heart.style.setProperty("--x",xMove);
+  heart.style.setProperty("--y",yMove);
+  heart.style.animation="floatHeart 2.5s ease-out forwards";
+
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),2500);
+ }
+
+ /* Ring */
+ const ring=document.createElement("div");
+ ring.className="ring";
+ ring.innerHTML="💍";
+ document.body.appendChild(ring);
 };
+
 </script>
 
 </body>
