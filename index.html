@@ -12,12 +12,12 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:#000;
   color:white;
-  overflow:hidden;
-  height:100vh;
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  perspective:1200px;
+  overflow:hidden;
+  position:relative;
 }
 
 /* Background stars */
@@ -30,23 +30,26 @@ canvas{
 /* Scene */
 .scene{
   position:absolute;
-  text-align:center;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
   opacity:0;
-  transform:scale(.9);
   transition:1.5s ease;
 }
+
 .scene.show{
   opacity:1;
-  transform:scale(1);
 }
 
-/* ===== SLIDESHOW INTRO ===== */
+/* Slideshow */
 .slideshow{
   width:220px;
   height:220px;
   border-radius:50%;
   overflow:hidden;
-  margin:0 auto 25px auto;
+  margin-bottom:20px;
   box-shadow:0 0 40px rgba(255,0,128,.8);
 }
 
@@ -56,28 +59,20 @@ canvas{
   object-fit:cover;
 }
 
-/* Title */
-#cinematic h1{
-  font-size:2.5rem;
-  background:linear-gradient(90deg,#ff0080,#ff6a00,#40e0d0);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-/* ===== 3D PHOTO CUBE ===== */
+/* 3D Cube */
 .cube{
-  width:200px;
-  height:200px;
+  width:180px;
+  height:180px;
   position:relative;
   transform-style:preserve-3d;
   animation:rotateCube 15s infinite linear;
-  margin:0 auto 20px auto;
+  margin:20px auto;
 }
 
 .cube div{
   position:absolute;
-  width:200px;
-  height:200px;
+  width:180px;
+  height:180px;
 }
 
 .cube img{
@@ -87,29 +82,33 @@ canvas{
   border-radius:15px;
 }
 
-.front  {transform:rotateY(0deg) translateZ(100px);}
-.back   {transform:rotateY(180deg) translateZ(100px);}
-.right  {transform:rotateY(90deg) translateZ(100px);}
-.left   {transform:rotateY(-90deg) translateZ(100px);}
+.front  {transform:rotateY(0deg) translateZ(90px);}
+.back   {transform:rotateY(180deg) translateZ(90px);}
+.right  {transform:rotateY(90deg) translateZ(90px);}
+.left   {transform:rotateY(-90deg) translateZ(90px);}
 
 @keyframes rotateCube{
   from{transform:rotateY(0deg)}
   to{transform:rotateY(360deg)}
 }
 
-/* ===== Final Card ===== */
+/* Card */
 .card{
-  width:350px;
-  padding:40px;
+  width:90%;
+  max-width:360px;
+  padding:35px;
   border-radius:25px;
-  background:rgba(255,255,255,.1);
+  background:rgba(255,255,255,.08);
   backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,.2);
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  text-align:center;
+  position:relative;
 }
 
+/* Buttons */
 button{
-  margin-top:20px;
+  margin-top:15px;
   padding:12px 25px;
   border:none;
   border-radius:25px;
@@ -123,9 +122,12 @@ button{
 }
 
 #noBtn{
-  position:absolute;
   background:#ccc;
   color:black;
+  position:absolute;
+  bottom:-60px;
+  left:50%;
+  transform:translateX(-50%);
 }
 
 /* Confetti */
@@ -152,13 +154,13 @@ button{
   <div class="slideshow">
     <img id="slide" src="photo1.jpg">
   </div>
-  <h1>Our Love Story Begins ❤️</h1>
+  <h1>Our Love Story ❤️</h1>
 </div>
 
 <!-- Scene 2 -->
 <div class="scene" id="final">
   <div class="card">
-    
+
     <div class="cube">
       <div class="front"><img src="photo1.jpg"></div>
       <div class="back"><img src="photo2.jpg"></div>
@@ -176,7 +178,7 @@ button{
 </div>
 
 <script>
-/* Scene transition */
+/* Scene switch */
 setTimeout(()=>{
   document.getElementById("cinematic").classList.remove("show");
   document.getElementById("final").classList.add("show");
@@ -190,7 +192,7 @@ setInterval(()=>{
   document.getElementById("slide").src=photos[i];
 },2500);
 
-/* YES button */
+/* YES */
 document.getElementById("yesBtn").onclick=()=>{
   document.getElementById("music").play();
   for(let i=0;i<100;i++){
@@ -206,11 +208,11 @@ document.getElementById("yesBtn").onclick=()=>{
 /* Runaway NO */
 const no=document.getElementById("noBtn");
 no.onmouseover=()=>{
-  no.style.left=Math.random()*200+"px";
-  no.style.top=Math.random()*150+"px";
+  no.style.left=Math.random()*70+"%";
+  no.style.bottom=Math.random()*120+"px";
 };
 
-/* Star Background */
+/* Stars */
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 canvas.width=innerWidth;
