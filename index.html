@@ -2,52 +2,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Ultimate Proposal ❤️</title>
+<title>Movie Proposal ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:black;
   color:white;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  height:100vh;
   overflow:hidden;
 }
 
-/* ---------- CINEMATIC INTRO ---------- */
-#intro{
+/* ---------- GALAXY BACKGROUND ---------- */
+canvas{
   position:fixed;
   inset:0;
-  background:black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:2rem;
-  letter-spacing:2px;
-  animation:fadeOut 4s forwards 3s;
-  z-index:50;
-}
-
-@keyframes fadeOut{
-  to{opacity:0;visibility:hidden}
+  z-index:0;
 }
 
 /* ---------- MAIN LAYOUT ---------- */
 .container{
+  position:relative;
+  z-index:5;
   height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:60px;
-}
-
-/* ---------- STAR BACKGROUND ---------- */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:0;
+  padding:40px;
 }
 
 /* ---------- GLASS UI ---------- */
@@ -56,66 +40,46 @@ canvas{
   backdrop-filter:blur(25px);
   border:1px solid rgba(255,255,255,.2);
   border-radius:30px;
-  padding:40px;
-  z-index:5;
-  box-shadow:0 0 50px rgba(255,0,128,.3);
+  padding:30px;
+  box-shadow:0 0 40px rgba(255,0,128,.3);
 }
 
-/* ---------- 3D CUBE ---------- */
-.scene{
-  width:260px;
-  height:260px;
-  perspective:1000px;
+/* ---------- PHOTO SLIDESHOW ---------- */
+.slideshow{
+  width:320px;
+  height:420px;
   position:relative;
+  overflow:hidden;
+  border-radius:25px;
 }
 
-.cube{
+.slideshow img{
+  position:absolute;
   width:100%;
   height:100%;
-  position:absolute;
-  transform-style:preserve-3d;
-  animation:rotateCube 12s infinite linear;
-  cursor:pointer;
-}
-
-.cube img{
-  position:absolute;
-  width:260px;
-  height:260px;
   object-fit:cover;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(255,0,128,.6);
+  opacity:0;
+  transition:1.5s ease;
 }
 
-/* Cube faces */
-.front{transform:rotateY(0deg) translateZ(130px)}
-.back{transform:rotateY(180deg) translateZ(130px)}
-.right{transform:rotateY(90deg) translateZ(130px)}
-.left{transform:rotateY(-90deg) translateZ(130px)}
-
-@keyframes rotateCube{
-  0%{transform:rotateX(-20deg) rotateY(0deg)}
-  100%{transform:rotateX(-20deg) rotateY(360deg)}
+.slideshow img.active{
+  opacity:1;
+  transform:scale(1.05);
 }
 
-/* ---------- FLOATING HEARTS AROUND CUBE ---------- */
-.floating-heart{
-  position:absolute;
-  font-size:22px;
-  animation:orbit 6s linear infinite;
-}
-
-@keyframes orbit{
-  from{transform:rotate(0deg) translateX(160px) rotate(0deg)}
-  to{transform:rotate(360deg) translateX(160px) rotate(-360deg)}
-}
-
-/* ---------- LOVE LETTER RIGHT ---------- */
+/* ---------- LOVE LETTER ---------- */
 #loveLetter{
-  width:400px;
+  width:350px;
   font-size:1.2rem;
-  line-height:1.6;
-  min-height:100px;
+  line-height:1.7;
+  min-height:150px;
+}
+
+/* ---------- COUNTDOWN ---------- */
+#countdown{
+  font-size:3rem;
+  margin-top:20px;
+  text-align:center;
 }
 
 /* ---------- BUTTON ---------- */
@@ -130,23 +94,22 @@ button{
   color:white;
   box-shadow:0 0 25px #ff0066;
   transition:.3s;
+  opacity:.5;
 }
-button:hover{transform:scale(1.1)}
+button.enabled{
+  opacity:1;
+}
+button:hover.enabled{
+  transform:scale(1.1);
+}
 
-/* ---------- ZOOM IMAGE ---------- */
-#zoomView{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
+/* ---------- SLOW MOTION MODE ---------- */
+.slow-motion{
+  animation:slowFade 3s ease forwards;
 }
-#zoomView img{
-  max-width:90%;
-  max-height:90%;
-  border-radius:20px;
+@keyframes slowFade{
+  from{transform:scale(1)}
+  to{transform:scale(1.08)}
 }
 
 /* ---------- HEART BURST ---------- */
@@ -155,78 +118,100 @@ button:hover{transform:scale(1.1)}
   to{transform:translate(var(--x),var(--y)) scale(1.5);opacity:0}
 }
 
-/* ---------- FIREWORK SKY ---------- */
+/* ---------- FIREWORK ---------- */
 @keyframes explode{
   0%{transform:scale(0);opacity:1}
   100%{transform:scale(4);opacity:0}
+}
+
+/* ---------- MOBILE OPTIMIZED ---------- */
+@media(max-width:900px){
+  .container{
+    flex-direction:column;
+    gap:30px;
+  }
+  #loveLetter{
+    width:90%;
+    text-align:center;
+  }
+  .slideshow{
+    width:260px;
+    height:350px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro">Every Love Story Is Beautiful… ❤️</div>
-
-<canvas id="stars"></canvas>
+<canvas id="galaxy"></canvas>
 <audio id="music" src="music.mp3" loop></audio>
 
 <div class="container">
 
-  <!-- LEFT SIDE CUBE -->
-  <div class="glass scene">
-    <div class="cube" id="cube">
-      <img src="photo1.jpg" class="front">
-      <img src="photo2.jpg" class="back">
-      <img src="photo3.jpg" class="right">
-      <img src="photo4.jpg" class="left">
-    </div>
+  <!-- PHOTO SIDE -->
+  <div class="glass slideshow">
+    <img src="photo1.jpg" class="active">
+    <img src="photo2.jpg">
+    <img src="photo3.jpg">
+    <img src="photo4.jpg">
   </div>
 
-  <!-- RIGHT SIDE LETTER -->
+  <!-- LETTER SIDE -->
   <div class="glass">
     <div id="loveLetter"></div>
-    <button id="yesBtn">YES ❤️</button>
+    <div id="countdown">3</div>
+    <button id="yesBtn" disabled>YES ❤️</button>
   </div>
 
 </div>
 
-<div id="zoomView"><img id="zoomImg"></div>
-
 <script>
 
-/* ---------- STAR BACKGROUND ---------- */
-const canvas=document.getElementById("stars");
+/* ---------- GALAXY ANIMATION ---------- */
+const canvas=document.getElementById("galaxy");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let stars=[];
-for(let i=0;i<150;i++){
- stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2});
+for(let i=0;i<200;i++){
+ stars.push({
+  x:Math.random()*canvas.width,
+  y:Math.random()*canvas.height,
+  size:Math.random()*2,
+  speed:Math.random()*0.5
+ });
 }
-function drawStars(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
+
+function animateGalaxy(){
+ ctx.fillStyle="black";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
  ctx.fillStyle="white";
+
  stars.forEach(s=>{
   ctx.beginPath();
   ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
   ctx.fill();
+  s.y+=s.speed;
+  if(s.y>canvas.height) s.y=0;
  });
- requestAnimationFrame(drawStars);
-}
-drawStars();
 
-/* ---------- FLOATING HEARTS AROUND CUBE ---------- */
-for(let i=0;i<6;i++){
- const h=document.createElement("div");
- h.className="floating-heart";
- h.innerHTML="❤️";
- h.style.animationDelay=(i*1)+"s";
- document.querySelector(".scene").appendChild(h);
+ requestAnimationFrame(animateGalaxy);
 }
+animateGalaxy();
+
+/* ---------- PHOTO SLIDESHOW ---------- */
+let slides=document.querySelectorAll(".slideshow img");
+let current=0;
+setInterval(()=>{
+ slides[current].classList.remove("active");
+ current=(current+1)%slides.length;
+ slides[current].classList.add("active");
+},4000);
 
 /* ---------- TYPEWRITER ---------- */
-const text="You are the most beautiful chapter of my life. Every smile of yours lights up my world. I promise to stand beside you forever. ❤️";
+const text="You walked into my life like a beautiful dream. Every heartbeat of mine whispers your name. I promise to cherish you today, tomorrow and forever. ❤️";
 let i=0;
 function typeWriter(){
  if(i<text.length){
@@ -235,33 +220,37 @@ function typeWriter(){
   setTimeout(typeWriter,40);
  }
 }
-setTimeout(typeWriter,4000);
+typeWriter();
 
-/* ---------- ZOOM ON CLICK ---------- */
-const cube=document.getElementById("cube");
-const zoom=document.getElementById("zoomView");
-const zoomImg=document.getElementById("zoomImg");
-
-cube.onclick=()=>{
- const imgs=cube.querySelectorAll("img");
- zoomImg.src=imgs[Math.floor(Math.random()*imgs.length)].src;
- zoom.style.display="flex";
-}
-zoom.onclick=()=>zoom.style.display="none";
-
-/* ---------- YES BUTTON EFFECT ---------- */
+/* ---------- COUNTDOWN ---------- */
+let count=3;
+const countdown=document.getElementById("countdown");
 const yesBtn=document.getElementById("yesBtn");
+
+let timer=setInterval(()=>{
+ count--;
+ countdown.innerHTML=count;
+ if(count===0){
+  clearInterval(timer);
+  countdown.innerHTML="Ready ❤️";
+  yesBtn.disabled=false;
+  yesBtn.classList.add("enabled");
+ }
+},1000);
+
+/* ---------- YES CLICK EFFECT ---------- */
 const music=document.getElementById("music");
 
 yesBtn.onclick=()=>{
+ document.body.classList.add("slow-motion");
  music.play();
 
  const rect=yesBtn.getBoundingClientRect();
  const centerX=rect.left+rect.width/2;
  const centerY=rect.top+rect.height/2;
 
- /* HEART BURST EVERY CLICK */
- for(let i=0;i<60;i++){
+ /* HEART BURST */
+ for(let i=0;i<70;i++){
   const heart=document.createElement("div");
   heart.innerHTML="❤️";
   heart.style.position="fixed";
@@ -270,28 +259,28 @@ yesBtn.onclick=()=>{
   heart.style.fontSize=(20+Math.random()*25)+"px";
   heart.style.zIndex="200";
 
-  const xMove=(Math.random()-0.5)*800+"px";
-  const yMove=(Math.random()-1)*800+"px";
+  const xMove=(Math.random()-0.5)*1000+"px";
+  const yMove=(Math.random()-1)*1000+"px";
 
   heart.style.setProperty("--x",xMove);
   heart.style.setProperty("--y",yMove);
-  heart.style.animation="floatHeart 2.5s ease-out forwards";
+  heart.style.animation="floatHeart 3s ease-out forwards";
   document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),2500);
+  setTimeout(()=>heart.remove(),3000);
  }
 
  /* FIREWORK SKY */
- for(let i=0;i<15;i++){
+ for(let i=0;i<20;i++){
   const fire=document.createElement("div");
   fire.innerHTML="💖";
   fire.style.position="fixed";
   fire.style.left=Math.random()*100+"vw";
   fire.style.top=Math.random()*60+"vh";
-  fire.style.fontSize="30px";
+  fire.style.fontSize="35px";
   fire.style.zIndex="150";
-  fire.style.animation="explode 1.5s ease-out forwards";
+  fire.style.animation="explode 2s ease-out forwards";
   document.body.appendChild(fire);
-  setTimeout(()=>fire.remove(),1500);
+  setTimeout(()=>fire.remove(),2000);
  }
 };
 
