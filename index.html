@@ -2,163 +2,213 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Valentine Priti ❤️</title>
+<title>For Priti ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#ff4e8c,#ff9a9e);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#000;
+  overflow:hidden;
   color:white;
-  text-align:center;
-  overflow:hidden;
+  perspective:1200px;
 }
 
-.container{
-  position:relative;
-  z-index:10;
-  padding:30px;
-}
-
-h1{font-size:2.4rem;margin-bottom:10px;}
-p{font-size:1.1rem;}
-
-#slideshow{
-  width:260px;
-  height:340px;
-  margin:20px auto;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(0,0,0,.4);
-}
-
-#slideshow img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-button{
-  padding:12px 24px;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-  font-size:1rem;
-  margin:10px;
-}
-
-#startBtn{background:white;color:#ff3366;font-weight:bold;}
-#yesBtn{background:#ff3366;color:white;}
-#noBtn{background:#ccc;color:black;position:absolute;}
-
-#popup{
-  display:none;
+/* ===== BACKGROUND PARTICLES ===== */
+canvas{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
-  z-index:20;
+  z-index:-1;
+}
+
+/* ===== SCENE WRAPPER ===== */
+.scene{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  opacity:0;
+  transform:scale(1.1);
+  transition:1.5s ease;
+}
+.show{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* ===== CINEMATIC ===== */
+#cinematic h1{
+  font-size:3rem;
+  text-align:center;
+  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 20px rgba(255,0,128,.4)}
+  to{text-shadow:0 0 50px rgba(255,0,128,.9)}
+}
+
+/* ===== 3D HEART STAGE ===== */
+#bollywood{
+  transform-style:preserve-3d;
+}
+
+.heart3d{
+  font-size:40px;
+  position:absolute;
+  animation:float3d 6s linear infinite;
+}
+
+@keyframes float3d{
+  0%{transform:translateZ(-500px) translateY(100vh) rotateY(0)}
+  100%{transform:translateZ(500px) translateY(-10vh) rotateY(360deg)}
+}
+
+/* ===== FUNNY ===== */
+#funny h2{
+  font-size:2rem;
+  margin-bottom:20px;
+}
+
+#noBtn{
+  position:absolute;
+  padding:12px 22px;
+  border:none;
+  border-radius:25px;
+  background:#ccc;
+  cursor:pointer;
+}
+
+/* ===== PREMIUM GLASS CARD ===== */
+#final{
+  display:flex;
   align-items:center;
   justify-content:center;
 }
 
 .card{
-  background:white;
-  color:#ff3366;
-  padding:25px;
-  border-radius:20px;
-  width:90%;
-  max-width:320px;
-  position:relative;
+  width:340px;
+  padding:40px;
+  border-radius:25px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,.2);
+  transform-style:preserve-3d;
+  transform:rotateY(20deg) rotateX(10deg);
+  transition:1s ease;
+  box-shadow:0 30px 60px rgba(0,0,0,.5);
 }
 
-#letter{
-  min-height:100px;
+.card:hover{
+  transform:rotateY(0) rotateX(0) scale(1.05);
+}
+
+.card h2{
+  margin-bottom:20px;
+}
+
+button{
   margin-top:15px;
-  font-size:1.1rem;
+  padding:14px 28px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:1rem;
 }
 
+#yesBtn{
+  background:linear-gradient(90deg,#ff3366,#ff6a00);
+  color:white;
+  box-shadow:0 0 20px rgba(255,100,150,.6);
+}
+
+/* CONFETTI */
 .confetti{
   position:fixed;
   width:10px;
   height:10px;
-  background:red;
-  animation:fall 3s linear infinite;
+  animation:fall 3s linear forwards;
 }
-
 @keyframes fall{
-  from{transform:translateY(-10vh);}
-  to{transform:translateY(110vh);}
+  from{transform:translateY(-10vh)}
+  to{transform:translateY(110vh)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>Happy Valentine’s Day Priti ❤️</h1>
-  <p>Every moment with you is my favorite 💕</p>
-
-  <div id="slideshow">
-    <img id="slide" src="photo1.jpg">
-  </div>
-
-  <button id="startBtn">Tap My Heart 💖</button>
-</div>
-
+<canvas id="bg"></canvas>
 <audio id="music" src="music.mp3" loop></audio>
 
-<div id="popup">
+<!-- CINEMATIC -->
+<div class="scene show" id="cinematic">
+  <h1>Our Love Story Begins... ❤️</h1>
+</div>
+
+<!-- 3D BOLLYWOOD -->
+<div class="scene" id="bollywood">
+  <h1 style="margin-bottom:20px">Priti ✨</h1>
+</div>
+
+<!-- FUNNY -->
+<div class="scene" id="funny">
+  <h2>Will You Be Mine Forever? 😏</h2>
+  <button id="noBtn">NO 😈</button>
+</div>
+
+<!-- FINAL PREMIUM -->
+<div class="scene" id="final">
   <div class="card">
-    <h2>Will you be my Valentine? 💍</h2>
-    <div id="letter"></div>
+    <h2>Will You Be My Valentine? 💍</h2>
+    <p>You are my today, tomorrow & always ❤️</p>
     <button id="yesBtn">YES ❤️</button>
-    <button id="noBtn">NO 😈</button>
   </div>
 </div>
 
 <script>
-/* MUSIC + POPUP */
-const startBtn = document.getElementById("startBtn");
-const popup = document.getElementById("popup");
-const music = document.getElementById("music");
-
-startBtn.onclick = () => {
-  music.play();
-  popup.style.display="flex";
-  typeLetter();
-};
-
-/* SLIDESHOW */
-const photos=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg"];
-let i=0;
-setInterval(()=>{
-  i=(i+1)%photos.length;
-  document.getElementById("slide").src=photos[i];
-},2500);
-
-/* TYPING LETTER */
-const text = "Priti, every smile of yours makes my world brighter. I can’t imagine my life without you. You are my today, tomorrow, and always ❤️";
-let idx=0;
-function typeLetter(){
-  if(idx<text.length){
-    document.getElementById("letter").innerHTML+=text.charAt(idx);
-    idx++;
-    setTimeout(typeLetter,40);
-  }
+const scenes=["cinematic","bollywood","funny","final"];
+function show(i){
+  scenes.forEach(id=>document.getElementById(id).classList.remove("show"));
+  document.getElementById(scenes[i]).classList.add("show");
 }
 
-/* NO BUTTON RUN AWAY */
-const noBtn=document.getElementById("noBtn");
-noBtn.onmouseover=()=>{
-  noBtn.style.left=Math.random()*200+"px";
-  noBtn.style.top=Math.random()*200+"px";
+/* Timeline */
+setTimeout(()=>show(1),4000);
+setTimeout(()=>{
+  show(2);
+  for(let i=0;i<25;i++){
+    const h=document.createElement("div");
+    h.className="heart3d";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=4+Math.random()*4+"s";
+    document.getElementById("bollywood").appendChild(h);
+  }
+},8000);
+
+setTimeout(()=>{
+  show(3);
+  document.getElementById("music").play();
+},13000);
+
+/* Runaway NO */
+const no=document.getElementById("noBtn");
+no.onmouseover=()=>{
+  no.style.left=Math.random()*80+"vw";
+  no.style.top=Math.random()*80+"vh";
 };
 
-/* YES = CONFETTI */
+/* YES CONFETTI */
 document.getElementById("yesBtn").onclick=()=>{
-  popup.innerHTML="<h1>YAYYY 💖💖💖</h1>";
-  for(let i=0;i<100;i++){
+  for(let i=0;i<120;i++){
     const c=document.createElement("div");
     c.className="confetti";
     c.style.left=Math.random()*100+"vw";
@@ -167,6 +217,42 @@ document.getElementById("yesBtn").onclick=()=>{
     setTimeout(()=>c.remove(),3000);
   }
 };
+
+/* ===== PARTICLE BACKGROUND ===== */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let particles=[];
+for(let i=0;i<120;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2,
+    d:Math.random()*1
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(255,255,255,.6)";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  update();
+}
+
+function update(){
+  particles.forEach(p=>{
+    p.y+=p.d;
+    if(p.y>canvas.height) p.y=0;
+  });
+}
+
+setInterval(draw,33);
 </script>
 
 </body>
