@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>For Priti ❤️</title>
@@ -11,114 +11,108 @@
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:#000;
-  overflow:hidden;
   color:white;
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   perspective:1200px;
 }
 
-/* ===== BACKGROUND PARTICLES ===== */
+/* Background stars */
 canvas{
   position:fixed;
   inset:0;
   z-index:-1;
 }
 
-/* ===== SCENE WRAPPER ===== */
+/* Scene */
 .scene{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+  position:absolute;
+  text-align:center;
   opacity:0;
-  transform:scale(1.1);
+  transform:scale(.9);
   transition:1.5s ease;
 }
-.show{
+.scene.show{
   opacity:1;
   transform:scale(1);
 }
 
-/* ===== CINEMATIC ===== */
+/* ===== SLIDESHOW INTRO ===== */
+.slideshow{
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:0 auto 25px auto;
+  box-shadow:0 0 40px rgba(255,0,128,.8);
+}
+
+.slideshow img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Title */
 #cinematic h1{
-  font-size:3rem;
-  text-align:center;
-  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  font-size:2.5rem;
+  background:linear-gradient(90deg,#ff0080,#ff6a00,#40e0d0);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:glow 3s infinite alternate;
 }
 
-@keyframes glow{
-  from{text-shadow:0 0 20px rgba(255,0,128,.4)}
-  to{text-shadow:0 0 50px rgba(255,0,128,.9)}
-}
-
-/* ===== 3D HEART STAGE ===== */
-#bollywood{
+/* ===== 3D PHOTO CUBE ===== */
+.cube{
+  width:200px;
+  height:200px;
+  position:relative;
   transform-style:preserve-3d;
+  animation:rotateCube 15s infinite linear;
+  margin:0 auto 20px auto;
 }
 
-.heart3d{
-  font-size:40px;
+.cube div{
   position:absolute;
-  animation:float3d 6s linear infinite;
+  width:200px;
+  height:200px;
 }
 
-@keyframes float3d{
-  0%{transform:translateZ(-500px) translateY(100vh) rotateY(0)}
-  100%{transform:translateZ(500px) translateY(-10vh) rotateY(360deg)}
+.cube img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:15px;
 }
 
-/* ===== FUNNY ===== */
-#funny h2{
-  font-size:2rem;
-  margin-bottom:20px;
+.front  {transform:rotateY(0deg) translateZ(100px);}
+.back   {transform:rotateY(180deg) translateZ(100px);}
+.right  {transform:rotateY(90deg) translateZ(100px);}
+.left   {transform:rotateY(-90deg) translateZ(100px);}
+
+@keyframes rotateCube{
+  from{transform:rotateY(0deg)}
+  to{transform:rotateY(360deg)}
 }
 
-#noBtn{
-  position:absolute;
-  padding:12px 22px;
-  border:none;
-  border-radius:25px;
-  background:#ccc;
-  cursor:pointer;
-}
-
-/* ===== PREMIUM GLASS CARD ===== */
-#final{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
+/* ===== Final Card ===== */
 .card{
-  width:340px;
+  width:350px;
   padding:40px;
   border-radius:25px;
   background:rgba(255,255,255,.1);
-  backdrop-filter:blur(30px);
+  backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,.2);
-  transform-style:preserve-3d;
-  transform:rotateY(20deg) rotateX(10deg);
-  transition:1s ease;
-  box-shadow:0 30px 60px rgba(0,0,0,.5);
-}
-
-.card:hover{
-  transform:rotateY(0) rotateX(0) scale(1.05);
-}
-
-.card h2{
-  margin-bottom:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
 button{
-  margin-top:15px;
-  padding:14px 28px;
+  margin-top:20px;
+  padding:12px 25px;
   border:none;
-  border-radius:30px;
+  border-radius:25px;
   cursor:pointer;
   font-size:1rem;
 }
@@ -126,10 +120,15 @@ button{
 #yesBtn{
   background:linear-gradient(90deg,#ff3366,#ff6a00);
   color:white;
-  box-shadow:0 0 20px rgba(255,100,150,.6);
 }
 
-/* CONFETTI */
+#noBtn{
+  position:absolute;
+  background:#ccc;
+  color:black;
+}
+
+/* Confetti */
 .confetti{
   position:fixed;
   width:10px;
@@ -148,67 +147,53 @@ button{
 <canvas id="bg"></canvas>
 <audio id="music" src="music.mp3" loop></audio>
 
-<!-- CINEMATIC -->
+<!-- Scene 1 -->
 <div class="scene show" id="cinematic">
-  <h1>Our Love Story Begins... ❤️</h1>
+  <div class="slideshow">
+    <img id="slide" src="photo1.jpg">
+  </div>
+  <h1>Our Love Story Begins ❤️</h1>
 </div>
 
-<!-- 3D BOLLYWOOD -->
-<div class="scene" id="bollywood">
-  <h1 style="margin-bottom:20px">Priti ✨</h1>
-</div>
-
-<!-- FUNNY -->
-<div class="scene" id="funny">
-  <h2>Will You Be Mine Forever? 😏</h2>
-  <button id="noBtn">NO 😈</button>
-</div>
-
-<!-- FINAL PREMIUM -->
+<!-- Scene 2 -->
 <div class="scene" id="final">
   <div class="card">
+    
+    <div class="cube">
+      <div class="front"><img src="photo1.jpg"></div>
+      <div class="back"><img src="photo2.jpg"></div>
+      <div class="right"><img src="photo3.jpg"></div>
+      <div class="left"><img src="photo4.jpg"></div>
+    </div>
+
     <h2>Will You Be My Valentine? 💍</h2>
     <p>You are my today, tomorrow & always ❤️</p>
+
     <button id="yesBtn">YES ❤️</button>
+    <button id="noBtn">NO 😈</button>
+
   </div>
 </div>
 
 <script>
-const scenes=["cinematic","bollywood","funny","final"];
-function show(i){
-  scenes.forEach(id=>document.getElementById(id).classList.remove("show"));
-  document.getElementById(scenes[i]).classList.add("show");
-}
-
-/* Timeline */
-setTimeout(()=>show(1),4000);
+/* Scene transition */
 setTimeout(()=>{
-  show(2);
-  for(let i=0;i<25;i++){
-    const h=document.createElement("div");
-    h.className="heart3d";
-    h.innerHTML="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.animationDuration=4+Math.random()*4+"s";
-    document.getElementById("bollywood").appendChild(h);
-  }
-},8000);
+  document.getElementById("cinematic").classList.remove("show");
+  document.getElementById("final").classList.add("show");
+},6000);
 
-setTimeout(()=>{
-  show(3);
-  document.getElementById("music").play();
-},13000);
+/* Slideshow */
+const photos=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg"];
+let i=0;
+setInterval(()=>{
+  i=(i+1)%photos.length;
+  document.getElementById("slide").src=photos[i];
+},2500);
 
-/* Runaway NO */
-const no=document.getElementById("noBtn");
-no.onmouseover=()=>{
-  no.style.left=Math.random()*80+"vw";
-  no.style.top=Math.random()*80+"vh";
-};
-
-/* YES CONFETTI */
+/* YES button */
 document.getElementById("yesBtn").onclick=()=>{
-  for(let i=0;i<120;i++){
+  document.getElementById("music").play();
+  for(let i=0;i<100;i++){
     const c=document.createElement("div");
     c.className="confetti";
     c.style.left=Math.random()*100+"vw";
@@ -218,41 +203,38 @@ document.getElementById("yesBtn").onclick=()=>{
   }
 };
 
-/* ===== PARTICLE BACKGROUND ===== */
+/* Runaway NO */
+const no=document.getElementById("noBtn");
+no.onmouseover=()=>{
+  no.style.left=Math.random()*200+"px";
+  no.style.top=Math.random()*150+"px";
+};
+
+/* Star Background */
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 canvas.width=innerWidth;
 canvas.height=innerHeight;
 
-let particles=[];
-for(let i=0;i<120;i++){
-  particles.push({
+let stars=[];
+for(let i=0;i<150;i++){
+  stars.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    r:Math.random()*2,
-    d:Math.random()*1
+    r:Math.random()*2
   });
 }
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="rgba(255,255,255,.6)";
-  particles.forEach(p=>{
+  ctx.fillStyle="white";
+  stars.forEach(s=>{
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
     ctx.fill();
   });
-  update();
 }
-
-function update(){
-  particles.forEach(p=>{
-    p.y+=p.d;
-    if(p.y>canvas.height) p.y=0;
-  });
-}
-
-setInterval(draw,33);
+setInterval(draw,50);
 </script>
 
 </body>
