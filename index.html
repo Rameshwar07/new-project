@@ -10,233 +10,162 @@
 
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#000;
+  background:black;
   color:white;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  height:100vh;
   overflow:hidden;
-  position:relative;
-}
-
-/* Background stars */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-}
-
-/* Scene */
-.scene{
-  position:absolute;
-  width:100%;
   display:flex;
   align-items:center;
   justify-content:center;
   flex-direction:column;
+}
+
+/* Background pulse */
+.pulse-bg{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,#ff0066,transparent 70%);
   opacity:0;
-  transition:1.5s ease;
+  z-index:-1;
+  animation:pulse 2s infinite;
 }
-
-.scene.show{
-  opacity:1;
-}
-
-/* Slideshow */
-.slideshow{
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  overflow:hidden;
-  margin-bottom:20px;
-  box-shadow:0 0 40px rgba(255,0,128,.8);
-}
-
-.slideshow img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* 3D Cube */
-.cube{
-  width:180px;
-  height:180px;
-  position:relative;
-  transform-style:preserve-3d;
-  animation:rotateCube 15s infinite linear;
-  margin:20px auto;
-}
-
-.cube div{
-  position:absolute;
-  width:180px;
-  height:180px;
-}
-
-.cube img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:15px;
-}
-
-.front  {transform:rotateY(0deg) translateZ(90px);}
-.back   {transform:rotateY(180deg) translateZ(90px);}
-.right  {transform:rotateY(90deg) translateZ(90px);}
-.left   {transform:rotateY(-90deg) translateZ(90px);}
-
-@keyframes rotateCube{
-  from{transform:rotateY(0deg)}
-  to{transform:rotateY(360deg)}
+@keyframes pulse{
+  0%{opacity:.2;transform:scale(1)}
+  50%{opacity:.6;transform:scale(1.2)}
+  100%{opacity:.2;transform:scale(1)}
 }
 
 /* Card */
 .card{
-  width:90%;
-  max-width:360px;
-  padding:35px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(25px);
   border-radius:25px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.2);
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  padding:40px;
   text-align:center;
+  width:350px;
+  box-shadow:0 0 40px rgba(255,0,128,.6);
   position:relative;
 }
 
-/* Buttons */
+h1{
+  font-size:1.8rem;
+  margin-bottom:20px;
+}
+
 button{
-  margin-top:15px;
-  padding:12px 25px;
+  padding:14px 30px;
   border:none;
-  border-radius:25px;
-  cursor:pointer;
+  border-radius:30px;
   font-size:1rem;
-}
-
-#yesBtn{
-  background:linear-gradient(90deg,#ff3366,#ff6a00);
+  cursor:pointer;
+  background:linear-gradient(90deg,#ff3366,#ff0066);
   color:white;
+  box-shadow:0 0 20px #ff0066;
+  transition:.3s;
+}
+button:hover{
+  transform:scale(1.1);
 }
 
-#noBtn{
-  background:#ccc;
-  color:black;
-  position:absolute;
-  bottom:-60px;
-  left:50%;
-  transform:translateX(-50%);
+/* Floating hearts */
+@keyframes floatHeart{
+  from{transform:translateY(0) scale(.5);opacity:1}
+  to{transform:translateY(-120vh) scale(1.5);opacity:0}
 }
 
-/* Confetti */
-.confetti{
+/* Firework */
+@keyframes explode{
+  0%{transform:scale(0);opacity:1}
+  100%{transform:scale(3);opacity:0}
+}
+
+/* Ring sparkle */
+@keyframes sparkle{
+  0%,100%{text-shadow:0 0 10px gold}
+  50%{text-shadow:0 0 30px white}
+}
+
+/* Name particles */
+.name{
   position:fixed;
-  width:10px;
-  height:10px;
-  animation:fall 3s linear forwards;
+  top:40%;
+  font-size:3rem;
+  font-weight:bold;
+  background:linear-gradient(90deg,#ff0080,#ffcc00,#ff0080);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glowName 2s infinite alternate;
 }
-@keyframes fall{
-  from{transform:translateY(-10vh)}
-  to{transform:translateY(110vh)}
+@keyframes glowName{
+  from{text-shadow:0 0 20px #ff0080}
+  to{text-shadow:0 0 60px #ff00cc}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
 <audio id="music" src="music.mp3" loop></audio>
 
-<!-- Scene 1 -->
-<div class="scene show" id="cinematic">
-  <div class="slideshow">
-    <img id="slide" src="photo1.jpg">
-  </div>
-  <h1>Our Love Story ❤️</h1>
-</div>
-
-<!-- Scene 2 -->
-<div class="scene" id="final">
-  <div class="card">
-
-    <div class="cube">
-      <div class="front"><img src="photo1.jpg"></div>
-      <div class="back"><img src="photo2.jpg"></div>
-      <div class="right"><img src="photo3.jpg"></div>
-      <div class="left"><img src="photo4.jpg"></div>
-    </div>
-
-    <h2>Will You Be My Valentine? 💍</h2>
-    <p>You are my today, tomorrow & always ❤️</p>
-
-    <button id="yesBtn">YES ❤️</button>
-    <button id="noBtn">NO 😈</button>
-
-  </div>
+<div class="card">
+  <h1>Will you be my Valentine? 💍</h1>
+  <button id="yesBtn">YES ❤️</button>
 </div>
 
 <script>
-/* Scene switch */
-setTimeout(()=>{
-  document.getElementById("cinematic").classList.remove("show");
-  document.getElementById("final").classList.add("show");
-},6000);
+const yesBtn=document.getElementById("yesBtn");
+const music=document.getElementById("music");
 
-/* Slideshow */
-const photos=["photo1.jpg","photo2.jpg","photo3.jpg","photo4.jpg"];
-let i=0;
-setInterval(()=>{
-  i=(i+1)%photos.length;
-  document.getElementById("slide").src=photos[i];
-},2500);
+yesBtn.onclick=(e)=>{
+  music.play();
 
-/* YES */
-document.getElementById("yesBtn").onclick=()=>{
-  document.getElementById("music").play();
-  for(let i=0;i<100;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+  /* Background pulse */
+  const bg=document.createElement("div");
+  bg.className="pulse-bg";
+  document.body.appendChild(bg);
+
+  /* Hearts burst from button */
+  const rect=yesBtn.getBoundingClientRect();
+  for(let i=0;i<50;i++){
+    const heart=document.createElement("div");
+    heart.innerHTML="❤️";
+    heart.style.position="fixed";
+    heart.style.left=rect.left+rect.width/2+"px";
+    heart.style.top=rect.top+"px";
+    heart.style.fontSize=(20+Math.random()*25)+"px";
+    heart.style.animation=`floatHeart ${3+Math.random()*3}s linear forwards`;
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
   }
+
+  /* Firework hearts */
+  for(let i=0;i<20;i++){
+    const fire=document.createElement("div");
+    fire.innerHTML="💖";
+    fire.style.position="fixed";
+    fire.style.left=Math.random()*100+"vw";
+    fire.style.top=Math.random()*100+"vh";
+    fire.style.fontSize="30px";
+    fire.style.animation="explode 1.5s ease-out forwards";
+    document.body.appendChild(fire);
+    setTimeout(()=>fire.remove(),1500);
+  }
+
+  /* Name glow */
+  const name=document.createElement("div");
+  name.className="name";
+  name.innerHTML="Priti ❤️";
+  document.body.appendChild(name);
+
+  /* Ring sparkle */
+  const ring=document.createElement("div");
+  ring.innerHTML="💍";
+  ring.style.position="fixed";
+  ring.style.bottom="20%";
+  ring.style.fontSize="60px";
+  ring.style.animation="sparkle 1s infinite";
+  document.body.appendChild(ring);
 };
-
-/* Runaway NO */
-const no=document.getElementById("noBtn");
-no.onmouseover=()=>{
-  no.style.left=Math.random()*70+"%";
-  no.style.bottom=Math.random()*120+"px";
-};
-
-/* Stars */
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-let stars=[];
-for(let i=0;i<150;i++){
-  stars.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2
-  });
-}
-
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-  stars.forEach(s=>{
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fill();
-  });
-}
-setInterval(draw,50);
 </script>
 
 </body>
